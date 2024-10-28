@@ -17,15 +17,15 @@ public class ControlFlowGenerator {
 
     public String analyzeCode() {
         try {
-            return codeParser.analyze(); // Return analysis result as string
+            return codeParser.analyze(); 
         } catch (Exception e) {
             errorManager.handleError(e);
-            return "Error during analysis: " + e.getMessage(); // Return error message
+            return "Error during analysis: " + e.getMessage(); 
         }
     }
 
     public String generateFlowchart() {
         String analysisResult = codeParser.analyze();
-        return flowchart.generateFlowchart(analysisResult); // Return flowchart result
+        return flowchart.generateFlowchart(analysisResult); 
     }
 }
