@@ -1,3 +1,5 @@
+package SoftwareEngineeringPro1;
+
 public class CodeParser {
 
     private String code;

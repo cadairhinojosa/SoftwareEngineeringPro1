@@ -1,3 +1,5 @@
+package SoftwareEngineeringPro1;
+
 public class FlowchartComponent {
     private String label;
     private String type;

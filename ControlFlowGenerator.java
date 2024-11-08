@@ -1,3 +1,4 @@
+package SoftwareEngineeringPro1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -5,10 +6,12 @@ import java.util.List;
 public class ControlFlowGenerator {
     private String code;
     private List<String> analysisResults;
+    private Flowchart flowchartPanel;
 
-    public ControlFlowGenerator() {
+    public ControlFlowGenerator(Flowchart flowchart) {
         this.code = "";
         this.analysisResults = new ArrayList<>();
+        this.flowchartPanel = flowchart;
     }
 
     public void inputCode(String code) {
@@ -18,24 +21,38 @@ public class ControlFlowGenerator {
     public String analyzeCode() {
         int ifCount = 0, loopCount = 0, tryCatchCount = 0;
         int inputCount = 0, outputCount = 0, comparisonCount = 0, operationCount = 0;
-
+        flowchartPanel.clearComponents();
         String[] lines = code.split("\n");
         for (String line : lines) {
             line = line.trim();
             if (line.startsWith("if") || line.startsWith("else")) {
                 ifCount++;
-            } else if (line.startsWith("for") || line.startsWith("while")) {
+                flowchartPanel.addComponent("If/Else");
+            }
+            else if (line.startsWith("for") || line.startsWith("while")) {
                 loopCount++;
-            } else if (line.contains("try") || line.contains("catch")) {
+                flowchartPanel.addComponent("Loops");
+            }
+            else if (line.contains("try") || line.contains("catch")) {
                 tryCatchCount++;
-            } else if (line.contains("Scanner") || line.contains("args")) {
+                flowchartPanel.addComponent("Try/Catch");
+            }
+            else if (line.contains("Scanner") || line.contains("args")) {
                 inputCount++;
-            } else if (line.contains("System.out.println")) {
+                //flowchartPanel.addComponent("If/Else");
+            }
+            else if (line.contains("System.out.println")) {
                 outputCount++;
-            } else if (line.contains(">") || line.contains("<") || line.contains("==") || line.contains(">=") || line.contains("<=")) {
+                flowchartPanel.addComponent("Output");
+            }
+            else if (line.contains(">") || line.contains("<") || line.contains("==") || line.contains(">=") || line.contains("<=")) {
                 comparisonCount++;
-            } else if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
+                flowchartPanel.addComponent("Comparisons");
+
+            }
+            else if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
                 operationCount++;
+                flowchartPanel.addComponent("Arithmetic");
             }
         }
 
