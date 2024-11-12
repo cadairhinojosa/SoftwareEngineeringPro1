@@ -1,3 +1,5 @@
+package SoftwareEngineeringPro1;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
@@ -5,7 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Flowchart extends JPanel {
 
@@ -18,31 +22,32 @@ public class Flowchart extends JPanel {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
 
-    // Method to generate the flowchart based on the analysis result
-    public void generateFlowchart(String analysisResult) {
+    public void addComponent(String componentType){
+        //Creates a map of the different components
+        Map<String, FlowchartComponent> flowchartMapping = new HashMap<>();
+        flowchartMapping.put("If/Else", new FlowchartComponent("Condition", "Decision"));
+        flowchartMapping.put("Loops", new FlowchartComponent("Loop", "Loop"));
+        flowchartMapping.put("Try/Catch", new FlowchartComponent("Exception Handling", "Try/Catch"));
+        flowchartMapping.put("Input", new FlowchartComponent("Input", "Input"));
+        flowchartMapping.put("Output", new FlowchartComponent("Output", "Output"));
+        flowchartMapping.put("Comparisons", new FlowchartComponent("Comparison", "Decision"));
+        flowchartMapping.put("Arithmetic", new FlowchartComponent("Operation", "Process"));
+
+        //Checks which component to add by comparing the key and the componentType
+        flowchartMapping.forEach((key, component) -> {
+           if(componentType.contains(key)) {
+               components.add(component); //Adds the corresponding component
+           }
+        });
+    }
+
+    //Clears all components
+    public void clearComponents(){
         components.clear();
-        String[] lines = analysisResult.split("\n");
+    }
 
-        for (String line : lines) {
-            line = line.trim();
-
-            if (line.contains("If/Else")) {
-                components.add(new FlowchartComponent("Condition", "Decision"));
-            } else if (line.contains("Loops")) {
-                components.add(new FlowchartComponent("Loop", "Loop"));
-            } else if (line.contains("Try/Catch")) {
-                components.add(new FlowchartComponent("Exception Handling", "Try/Catch"));
-            } else if (line.contains("Input")) {
-                components.add(new FlowchartComponent("Input", "Input"));
-            } else if (line.contains("Output")) {
-                components.add(new FlowchartComponent("Output", "Output"));
-            } else if (line.contains("Comparisons")) {
-                components.add(new FlowchartComponent("Comparison", "Decision"));
-            } else if (line.contains("Arithmetic")) {
-                components.add(new FlowchartComponent("Operation", "Process"));
-            }
-        }
-
+    // Method to generate the flowchart based on the analysis result
+    public void generateFlowchart(String line) {
         // Update panel size to account for the number of components
         panelHeight = components.size() * 120 + 200;
         setPreferredSize(new Dimension(panelWidth, panelHeight));

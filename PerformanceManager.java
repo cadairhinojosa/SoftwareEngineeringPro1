@@ -1,3 +1,5 @@
+package SoftwareEngineeringPro1;
+
 public class PerformanceManager {
 
     public void optimizeParsing() {
