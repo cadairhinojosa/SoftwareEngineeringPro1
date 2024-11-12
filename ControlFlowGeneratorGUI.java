@@ -1,5 +1,3 @@
-package SoftwareEngineeringPro1;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -53,13 +51,23 @@ public class ControlFlowGeneratorGUI extends JFrame {
         analyzeButton.addActionListener(e -> {
             String code = codeInputArea.getText();
             if (!code.isEmpty()) {
+                // Check for syntax errors using ErrorManager
+                String syntaxErrors = ErrorManager.checkSyntaxErrors(code);
+                if (!syntaxErrors.isEmpty()) {
+                    // Show error popup and stop further analysis
+                    JOptionPane.showMessageDialog(this, "Syntax Errors Detected:\n" + syntaxErrors, 
+                                                  "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+        
+                // Proceed with analysis if no errors are found
                 generator.inputCode(code);
                 String analysisResult = generator.analyzeCode();
                 outputArea.setText(analysisResult);
             } else {
                 outputArea.setText("Please enter code for analysis.");
             }
-        });
+        });        
 
         // Generate Flowchart button logic
         generateButton.addActionListener(e -> {
