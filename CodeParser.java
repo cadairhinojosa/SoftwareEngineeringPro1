@@ -1,5 +1,3 @@
-package SoftwareEngineeringPro1;
-
 public class CodeParser {
 
     private String code;
@@ -15,41 +13,56 @@ public class CodeParser {
         int nestedLoopLevel = 0, maxNestedLoopLevel = 0;
         int nestedConditionLevel = 0, maxNestedConditionLevel = 0;
 
+        boolean inTryBlock = false; // Track whether we are inside a try block
+
         for (String line : lines) {
             line = line.trim();
+
+            // Skip comments and empty lines
+            if (line.isEmpty() || line.startsWith("//")) {
+                continue;
+            }
 
             // Detect if/else conditions
             if (line.startsWith("if") || line.contains("else")) {
                 ifCount++;
                 nestedConditionLevel++;
                 maxNestedConditionLevel = Math.max(maxNestedConditionLevel, nestedConditionLevel);
-                if (line.contains(">") || line.contains("<") || line.contains("==") ||
-                    line.contains(">=") || line.contains("<=")) {
-                    comparisonCount++;
-                }
             }
+
+            // Detect comparisons in conditions
+            comparisonCount += countComparisons(line);
+
             // Detect loops (for/while)
-            else if (line.startsWith("for") || line.startsWith("while")) {
+            if (line.startsWith("for") || line.startsWith("while")) {
                 loopCount++;
                 nestedLoopLevel++;
                 maxNestedLoopLevel = Math.max(maxNestedLoopLevel, nestedLoopLevel);
             }
+
             // Detect try-catch blocks
-            else if (line.contains("try") || line.contains("catch")) {
-                tryCatchCount++;
+            if (line.contains("try")) {
+                if (!inTryBlock) {
+                    tryCatchCount++;
+                    inTryBlock = true; // Entering a try block
+                }
             }
+            if (line.contains("catch")) {
+                inTryBlock = false; // Exiting the try-catch block
+            }
+
             // Detect input handling (e.g., Scanner)
-            else if (line.contains("Scanner") || line.contains("args") || line.contains(".read")) {
+            if (line.contains("Scanner") || line.contains(".read")) {
                 inputCount++;
             }
+
             // Detect output handling (e.g., System.out.println)
-            else if (line.contains("System.out.println") || line.contains(".write")) {
+            if (line.contains("System.out.println") || line.contains(".write")) {
                 outputCount++;
             }
+
             // Detect arithmetic operations
-            else if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
-                operationCount++;
-            }
+            operationCount += countArithmeticOperations(line);
 
             // Handle the end of blocks
             if (line.equals("}")) {
@@ -72,5 +85,30 @@ public class CodeParser {
         result.append("- Arithmetic Operations: ").append(operationCount).append("\n");
 
         return result.toString();
+    }
+
+    // Helper method to count occurrences of comparison operators
+    private int countComparisons(String line) {
+        String[] comparisons = {">", "<", "==", ">=", "<="};
+        int count = 0;
+        for (String comp : comparisons) {
+            count += line.split(comp, -1).length - 1;
+        }
+        return count;
+    }
+
+    // Helper method to count occurrences of arithmetic operators
+    private int countArithmeticOperations(String line) {
+        // Exclude arithmetic operators in comments or strings
+        if (line.startsWith("//") || line.contains("\"")) {
+            return 0;
+        }
+        return countOccurrences(line, '+') + countOccurrences(line, '-') +
+               countOccurrences(line, '*') + countOccurrences(line, '/');
+    }
+
+    // General helper method to count occurrences of a character in a string
+    private int countOccurrences(String str, char ch) {
+        return (int) str.chars().filter(c -> c == ch).count();
     }
 }
