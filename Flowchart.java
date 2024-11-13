@@ -31,7 +31,7 @@ public class Flowchart extends JPanel {
         flowchartMapping.put("Input", new FlowchartComponent("Input", "Input"));
         flowchartMapping.put("Output", new FlowchartComponent("Output", "Output"));
         flowchartMapping.put("Comparisons", new FlowchartComponent("Comparison", "Decision"));
-        flowchartMapping.put("Arithmetic", new FlowchartComponent("Operation", "Process"));
+        flowchartMapping.put("Arithmetic", new FlowchartComponent("Operation", "Arithmetic"));
 
         //Checks which component to add by comparing the key and the componentType
         flowchartMapping.forEach((key, component) -> {
@@ -120,7 +120,7 @@ public class Flowchart extends JPanel {
                 drawDiamond(g2d, x, y, width, height, label);
                 drawArrow(g2d, x + width / 2, y + height, x + width / 2, y + yOffset, "True");
                 y += yOffset;
-            } else if ("Operation".equals(type)) {
+            } else if ("Arithmetic".equals(type)) {
                 drawRectangle(g2d, x, y, width, height, label);
                 drawArrow(g2d, x + width / 2, y + height, x + width / 2, y + yOffset, "");
                 y += yOffset;

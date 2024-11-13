@@ -21,11 +21,13 @@ public class ControlFlowGenerator {
     public String analyzeCode() {
         int ifCount = 0, loopCount = 0, tryCatchCount = 0;
         int inputCount = 0, outputCount = 0, comparisonCount = 0, operationCount = 0;
+        boolean hasTry = false, insidePrint = false;
+
         flowchartPanel.clearComponents();
         String[] lines = code.split("\n");
         for (String line : lines) {
             line = line.trim();
-            if (line.startsWith("if") || line.startsWith("else")) {
+            if (line.contains("if") || line.contains("else")) {
                 ifCount++;
                 flowchartPanel.addComponent("If/Else");
             }
@@ -33,27 +35,35 @@ public class ControlFlowGenerator {
                 loopCount++;
                 flowchartPanel.addComponent("Loops");
             }
-            else if (line.contains("try") || line.contains("catch")) {
-                tryCatchCount++;
-                flowchartPanel.addComponent("Try/Catch");
-            }
             else if (line.contains("Scanner") || line.contains("args")) {
                 inputCount++;
                 //flowchartPanel.addComponent("If/Else");
             }
             else if (line.contains("System.out.println")) {
                 outputCount++;
+                insidePrint = true;
                 flowchartPanel.addComponent("Output");
             }
-            else if (line.contains(">") || line.contains("<") || line.contains("==") || line.contains(">=") || line.contains("<=")) {
+            else if (line.contains("try") || hasTry) {
+                hasTry = true;
+                if(line.contains("catch")) {
+                    tryCatchCount++;
+                    flowchartPanel.addComponent("Try/Catch");
+                    hasTry = false;
+                }
+            }
+
+            if (line.contains(">") || line.contains("<") || line.contains("==") || line.contains(">=") || line.contains("<=")) {
                 comparisonCount++;
                 flowchartPanel.addComponent("Comparisons");
 
             }
-            else if (line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) {
+            if ((line.contains("+") || line.contains("-") || line.contains("*") || line.contains("/")) && !insidePrint) {
                 operationCount++;
                 flowchartPanel.addComponent("Arithmetic");
             }
+            System.out.println(line);
+            insidePrint = false;
         }
 
         // Build the analysis result string

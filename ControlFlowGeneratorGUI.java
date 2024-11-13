@@ -1,3 +1,4 @@
+package SoftwareEngineeringPro1;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -6,7 +7,6 @@ public class ControlFlowGeneratorGUI extends JFrame {
     private JTextArea codeInputArea, outputArea;
     private ControlFlowGenerator generator;
     private Flowchart flowchartPanel;
-
     public ControlFlowGeneratorGUI() {
         super("Control Flow Generator");
         this.flowchartPanel = new Flowchart();
