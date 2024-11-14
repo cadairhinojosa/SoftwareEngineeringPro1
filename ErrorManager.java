@@ -1,4 +1,4 @@
-package SoftwareEngineeringPro1;
+
 import java.util.Stack;
 
 public class ErrorManager {
@@ -29,7 +29,7 @@ public class ErrorManager {
             }
 
             // Check for missing semicolon
-            if (!line.endsWith(";") && !line.endsWith("{") && !line.endsWith("}") && !line.isBlank()) {
+            if (!line.endsWith(";") && !line.endsWith("{") && !line.endsWith("}") && !line.isBlank() && line.endsWith(")")) {
                 errors.append("Error: Missing semicolon at line ").append(lineCount).append("\n");
             }
         }
